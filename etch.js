@@ -10,35 +10,37 @@ const booleanArray = [0, 0, 0, 0];
 let firstInput;
 let secondInput;
 
-userInput.oninput = function () {
-  userInput.value = userInput.value.replace(/(?!^-)[^0-9.]/g, "").replace(/(\..*?)\..*/g, "$1").replace(/^0[^.]/, "0");
-};
+window.addEventListener("keydown", keyboardInput, false);
 
-addButton.addEventListener("click", () => {
+userInput.addEventListener("input", inputValidation);
+
+function inputValidation() {
+  userInput.value = userInput.value
+    .replace(/(?!^-)[^0-9.]/g, "")
+    .replace(/(\..*?)\..*/g, "$1")
+    .replace(/^0[^.]/, "0");
+}
+
+function keyboardInput(k) {
+  inputValidation();
+  if (k.keyCode == "191") {
+    k.preventDefault();
+    console.log("/");
+  }
+}
+
+function operatorSelection(arrayIndex, arrayValue) {
   resetArray();
-  booleanArray[0] = 1;
-  console.log(booleanArray[0]);
+  booleanArray[arrayIndex] = arrayValue;
+  console.log(booleanArray[arrayIndex]);
   saveInput();
   firstInputText.innerHTML = firstInput;
-});
+}
 
-subButton.addEventListener("click", () => {
-  resetArray();
-  booleanArray[1] = 2;
-  saveInput();
-});
-
-mulButton.addEventListener("click", () => {
-  resetArray();
-  booleanArray[2] = 3;
-  saveInput();
-});
-
-divideButton.addEventListener("click", () => {
-  resetArray();
-  booleanArray[3] = 4;
-  saveInput();
-});
+addButton.addEventListener("click", operatorSelection(0, 1));
+subButton.addEventListener("click", operatorSelection(1, 2));
+mulButton.addEventListener("click", operatorSelection(2, 3));
+divideButton.addEventListener("click", operatorSelection(3, 4));
 
 equalsButton.addEventListener("click", () => {
   equals();
@@ -59,26 +61,29 @@ function saveInput() {
 }
 
 function addition() {
-  return console.log(firstInput + secondInput);
+  console.log(firstInput + secondInput);
+  return firstInput + secondInput;
 }
 
 function subtraction() {
-  return console.log(firstInput - secondInput);
+  console.log(firstInput - secondInput);
+  return firstInput - secondInput;
 }
 
 function multiplication() {
-  return console.log(firstInput * secondInput);
+  console.log(firstInput * secondInput);
+  return firstInput * secondInput;
 }
 
 function division() {
-  return console.log(firstInput / secondInput);
+  console.log(firstInput / secondInput);
+  return firstInput / secondInput;
 }
 
-function sign() {
-
-}
+function sign() {}
 
 function squareRoot() {}
+
 function equals() {
   let caseNumber = 0;
   for (var i = 0; i < booleanArray.length; i++) {
@@ -88,21 +93,25 @@ function equals() {
   switch (caseNumber) {
     case 1:
       secondInput = parseFloat(userInput.value);
-      addition();
+      userInput.value = addition();
+      firstInputText.innerHTML = firstInput + "+" + secondInput;
       break;
     case 2:
       secondInput = parseFloat(userInput.value);
-      subtraction();
+      userInput.value = toString(subtraction());
+      firstInputText.innerHTML = firstInput + "-" + secondInput;
       break;
 
     case 3:
       secondInput = parseFloat(userInput.value);
-      multiplication();
+      userInput.value = toString(multiplication());
+      firstInputText.innerHTML = firstInput + "*" + secondInput;
       break;
 
     case 4:
       secondInput = parseFloat(userInput.value);
-      division();
+      userInput.value = toString(division());
+      firstInputText.innerHTML = firstInput + "/" + secondInput;
       break;
     default:
       console.log("Unsuccessful");
@@ -117,6 +126,4 @@ function clearAll() {
   resetArray();
 }
 
-function deleteInput() {
-  
-}
+function deleteInput() {}
