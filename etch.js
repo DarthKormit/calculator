@@ -22,20 +22,23 @@ function inputValidation() {
 }
 
 function keyboardInput(k) {
-  inputValidation();
-  if (k.keyCode == "191") {
-    k.preventDefault();
-    console.log("/");
+  if (!(userInput === document.activeElement)) {
+    userInput.value = userInput.value + String.fromCharCode(k.keyCode);
   }
+  inputValidation();
 }
 
 function keyboardOperator(k) {
   console.log(k.keyCode);
   switch (k.keyCode) {
-    case 61 || 107:
+    case 61 :
       if (k.shiftKey == true) {
         operatorSelection(0, 1);
+        break;
       }
+      console.log("activated");
+      equals();
+      resetArray();
       break;
     case 173:
       if (k.shiftKey == true) {
@@ -50,9 +53,9 @@ function keyboardOperator(k) {
     case 191:
       operatorSelection(3, 4);
       break;
-    case 61:
+    case 13:
       equals();
-      resetArray();
+      resetArray(); 
       break;
     default:
       break;
