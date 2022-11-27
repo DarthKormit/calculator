@@ -5,6 +5,8 @@ let subButton = document.getElementById("sub");
 let mulButton = document.getElementById("mul");
 let divideButton = document.getElementById("divide");
 let firstInputText = document.getElementById("first-input-text");
+let clearAllButton = document.getElementById("clear-all");
+let clearEntryButton = document.getElementById("clear-entry");
 
 const booleanArray = [0, 0, 0, 0];
 let firstInput;
@@ -24,14 +26,18 @@ function inputValidation() {
 function keyboardInput(k) {
   if (!(userInput === document.activeElement)) {
     userInput.value = userInput.value + String.fromCharCode(k.keyCode);
+    if (k.keyCode == 190) {
+      userInput.value = userInput.value + ".";
+    }
   }
   inputValidation();
 }
 
 function keyboardOperator(k) {
-  console.log(k.keyCode);
+  console.log(k.which);
+  console.log(String.fromCharCode(k.keyCode));
   switch (k.keyCode) {
-    case 61 :
+    case 61:
       if (k.shiftKey == true) {
         operatorSelection(0, 1);
         break;
@@ -55,7 +61,9 @@ function keyboardOperator(k) {
       break;
     case 13:
       equals();
-      resetArray(); 
+      resetArray();
+      break;
+    case 8:
       break;
     default:
       break;
@@ -70,11 +78,20 @@ function operatorSelection(arrayIndex, arrayValue) {
   firstInputText.innerHTML = firstInput;
 }
 
-addButton.addEventListener("click", function(){operatorSelection(0, 1);});
-subButton.addEventListener("click", function(){operatorSelection(1, 2);});
-mulButton.addEventListener("click", function(){operatorSelection(2, 3);});
-divideButton.addEventListener("click", function(){operatorSelection(3, 4);});
-
+addButton.addEventListener("click", function () {
+  operatorSelection(0, 1);
+});
+subButton.addEventListener("click", function () {
+  operatorSelection(1, 2);
+});
+mulButton.addEventListener("click", function () {
+  operatorSelection(2, 3);
+});
+divideButton.addEventListener("click", function () {
+  operatorSelection(3, 4);
+});
+clearAllButton.addEventListener("click", () => clearAll());
+clearEntryButton.addEventListener("click", () => clearEntry());
 equalsButton.addEventListener("click", () => {
   equals();
   resetArray();
@@ -89,7 +106,7 @@ function resetArray() {
 function saveInput() {
   if (firstInput === undefined) {
     firstInput = parseFloat(userInput.value);
-    userInput.value = "";
+    userInput.value = "0";
   }
 }
 
@@ -155,12 +172,14 @@ function equals() {
 function clearAll() {
   firstInput = undefined;
   secondInput = undefined;
-  userInput.value = "";
+  userInput.value = "0";
+  firstInputText.innerHTML = "0";
   resetArray();
+  console.log("executed");
 }
 
 function clearEntry() {
-  userInput.value = "";
+  userInput.value = "0";
 }
 
 function backspace() {}
