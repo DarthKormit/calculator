@@ -11,7 +11,7 @@ let firstInput;
 let secondInput;
 
 window.addEventListener("keydown", keyboardInput, false);
-
+window.addEventListener("keydown", keyboardOperator, false);
 userInput.addEventListener("input", inputValidation);
 
 function inputValidation() {
@@ -29,6 +29,36 @@ function keyboardInput(k) {
   }
 }
 
+function keyboardOperator(k) {
+  console.log(k.keyCode);
+  switch (k.keyCode) {
+    case 61 || 107:
+      if (k.shiftKey == true) {
+        operatorSelection(0, 1);
+      }
+      break;
+    case 173:
+      if (k.shiftKey == true) {
+        operatorSelection(1, 2);
+      }
+      break;
+    case 56:
+      if (k.shiftKey == true) {
+        operatorSelection(2, 3);
+      }
+      break;
+    case 191:
+      operatorSelection(3, 4);
+      break;
+    case 61:
+      equals();
+      resetArray();
+      break;
+    default:
+      break;
+  }
+}
+
 function operatorSelection(arrayIndex, arrayValue) {
   resetArray();
   booleanArray[arrayIndex] = arrayValue;
@@ -37,10 +67,10 @@ function operatorSelection(arrayIndex, arrayValue) {
   firstInputText.innerHTML = firstInput;
 }
 
-addButton.addEventListener("click", operatorSelection(0, 1));
-subButton.addEventListener("click", operatorSelection(1, 2));
-mulButton.addEventListener("click", operatorSelection(2, 3));
-divideButton.addEventListener("click", operatorSelection(3, 4));
+addButton.addEventListener("click", function(){operatorSelection(0, 1);});
+subButton.addEventListener("click", function(){operatorSelection(1, 2);});
+mulButton.addEventListener("click", function(){operatorSelection(2, 3);});
+divideButton.addEventListener("click", function(){operatorSelection(3, 4);});
 
 equalsButton.addEventListener("click", () => {
   equals();
@@ -98,19 +128,19 @@ function equals() {
       break;
     case 2:
       secondInput = parseFloat(userInput.value);
-      userInput.value = toString(subtraction());
+      userInput.value = subtraction();
       firstInputText.innerHTML = firstInput + "-" + secondInput;
       break;
 
     case 3:
       secondInput = parseFloat(userInput.value);
-      userInput.value = toString(multiplication());
+      userInput.value = multiplication();
       firstInputText.innerHTML = firstInput + "*" + secondInput;
       break;
 
     case 4:
       secondInput = parseFloat(userInput.value);
-      userInput.value = toString(division());
+      userInput.value = division();
       firstInputText.innerHTML = firstInput + "/" + secondInput;
       break;
     default:
@@ -126,4 +156,8 @@ function clearAll() {
   resetArray();
 }
 
-function deleteInput() {}
+function clearEntry() {
+  userInput.value = "";
+}
+
+function backspace() {}
