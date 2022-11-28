@@ -7,6 +7,7 @@ let divideButton = document.getElementById("divide");
 let firstInputText = document.getElementById("first-input-text");
 let clearAllButton = document.getElementById("clear-all");
 let clearEntryButton = document.getElementById("clear-entry");
+let backspaceButton = document.getElementById("backspace");
 
 const booleanArray = [0, 0, 0, 0];
 let firstInput;
@@ -21,9 +22,16 @@ function inputValidation() {
     .replace(/(?!^-)[^0-9.]/g, "")
     .replace(/(\..*?)\..*/g, "$1")
     .replace(/^0[^.]/, "0");
+  if (userInput.value == "") {
+    userInput.value = "0";
+  }
 }
 
 function keyboardInput(k) {
+  k.preventDefault();
+  if (userInput.value == "0") {
+    userInput.value = "";
+  }
   if (!(userInput === document.activeElement)) {
     userInput.value = userInput.value + String.fromCharCode(k.keyCode);
     if (k.keyCode == 190) {
@@ -96,6 +104,7 @@ equalsButton.addEventListener("click", () => {
   equals();
   resetArray();
 });
+backspaceButton.addEventListener("click", () => backspace());
 
 function resetArray() {
   for (let i = 0; i < booleanArray.length; i++) {
@@ -182,4 +191,11 @@ function clearEntry() {
   userInput.value = "0";
 }
 
-function backspace() {}
+function backspace() {
+  let backspaceString = userInput.value;
+  console.log(backspaceString);
+  backspaceString = backspaceString.slice(0, -1);
+  console.log(backspaceString);
+  userInput.value = backspaceString;
+  console.log("worked");
+}
