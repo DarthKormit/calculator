@@ -15,27 +15,41 @@ let secondInput;
 
 window.addEventListener("keydown", keyboardInput, false);
 window.addEventListener("keydown", keyboardOperator, false);
-userInput.addEventListener("input", inputValidation);
+userInput.addEventListener("input", inputValidation, false);
+userInput.addEventListener("keyup", inputAlwaysZero, false);
+
+function inputAlwaysZero(){
+  if (userInput.value == "") {
+    console.log(userInput.value);
+    userInput.value = "0";
+  }
+}
 
 function inputValidation() {
   userInput.value = userInput.value
     .replace(/(?!^-)[^0-9.]/g, "")
     .replace(/(\..*?)\..*/g, "$1")
     .replace(/^0[^.]/, "0");
-  if (userInput.value == "") {
-    userInput.value = "0";
+
+  if (userInput.value === ".") {
+    userInput.value = "0" + userInput.value;
   }
 }
 
 function keyboardInput(k) {
-  k.preventDefault();
+  if (k.shiftKey == true && k.keyCode == 56) {
+    operatorSelection(2, 3);
+    return;
+  }
   if (userInput.value == "0") {
     userInput.value = "";
   }
   if (!(userInput === document.activeElement)) {
     userInput.value = userInput.value + String.fromCharCode(k.keyCode);
-    if (k.keyCode == 190) {
+    if (k.keyCode == 190 && !(userInput.value === "0")) {
       userInput.value = userInput.value + ".";
+    } else if (k.keyCode == 190 && userInput.value === "0") {
+      userInput.value = userInput.value + "0";
     }
   }
   inputValidation();
@@ -55,16 +69,17 @@ function keyboardOperator(k) {
       resetArray();
       break;
     case 173:
-      if (k.shiftKey == true) {
-        operatorSelection(1, 2);
-      }
+      operatorSelection(1, 2);
       break;
     case 56:
       if (k.shiftKey == true) {
-        operatorSelection(2, 3);
+        if (userInput === document.activeElement) {
+          operatorSelection(2, 3);
+        }
       }
       break;
     case 191:
+      k.preventDefault();
       operatorSelection(3, 4);
       break;
     case 13:
@@ -72,6 +87,7 @@ function keyboardOperator(k) {
       resetArray();
       break;
     case 8:
+      backspace();
       break;
     default:
       break;
@@ -192,10 +208,13 @@ function clearEntry() {
 }
 
 function backspace() {
-  let backspaceString = userInput.value;
-  console.log(backspaceString);
-  backspaceString = backspaceString.slice(0, -1);
-  console.log(backspaceString);
-  userInput.value = backspaceString;
-  console.log("worked");
+  if (!(userInput === document.activeElement)) {
+    let backspaceString = userInput.value;
+    console.log(backspaceString);
+    backspaceString = backspaceString.slice(0, -1);
+    console.log(backspaceString);
+    userInput.value = backspaceString;
+    console.log("worked");
+    inputAlwaysZero();
+  }
 }
