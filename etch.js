@@ -8,8 +8,11 @@ let firstInputText = document.getElementById("first-input-text");
 let clearAllButton = document.getElementById("clear-all");
 let clearEntryButton = document.getElementById("clear-entry");
 let backspaceButton = document.getElementById("backspace");
+let signButton = document.getElementById("sign");
+let exponentialButton = document.getElementById("exponential");
+let rootButton = document.getElementById("root");
 
-const booleanArray = [0, 0, 0, 0];
+const booleanArray = [0, 0, 0, 0, 0, 0];
 let firstInput;
 let secondInput;
 
@@ -18,7 +21,7 @@ window.addEventListener("keydown", keyboardOperator, false);
 userInput.addEventListener("input", inputValidation, false);
 userInput.addEventListener("keyup", inputAlwaysZero, false);
 
-function inputAlwaysZero(){
+function inputAlwaysZero() {
   if (userInput.value == "") {
     console.log(userInput.value);
     userInput.value = "0";
@@ -114,6 +117,12 @@ mulButton.addEventListener("click", function () {
 divideButton.addEventListener("click", function () {
   operatorSelection(3, 4);
 });
+exponentialButton.addEventListener("click", () => {
+  operatorSelection(4, 5);
+});
+rootButton.addEventListener("click", () => {
+  operatorSelection(5, 6);
+});
 clearAllButton.addEventListener("click", () => clearAll());
 clearEntryButton.addEventListener("click", () => clearEntry());
 equalsButton.addEventListener("click", () => {
@@ -121,6 +130,7 @@ equalsButton.addEventListener("click", () => {
   resetArray();
 });
 backspaceButton.addEventListener("click", () => backspace());
+signButton.addEventListener("click", () => sign());
 
 function resetArray() {
   for (let i = 0; i < booleanArray.length; i++) {
@@ -155,9 +165,24 @@ function division() {
   return firstInput / secondInput;
 }
 
-function sign() {}
+function exponential() {
+  console.log(Math.pow(firstInput, secondInput));
+  return Math.pow(firstInput, secondInput);
+}
 
-function squareRoot() {}
+function root() {
+  console.log(Math.pow(firstInput, 1 / secondInput));
+  return Math.pow(firstInput, 1 / secondInput);
+}
+
+function sign() {
+  let signString = userInput.value;
+  if (signString.startsWith("-", 0)) {
+    userInput.value = signString.substring(1);
+  } else {
+    userInput.value = "-" + signString;
+  }
+}
 
 function equals() {
   let caseNumber = 0;
@@ -187,6 +212,16 @@ function equals() {
       secondInput = parseFloat(userInput.value);
       userInput.value = division();
       firstInputText.innerHTML = firstInput + "/" + secondInput;
+      break;
+    case 5:
+      secondInput = parseFloat(userInput.value);
+      userInput.value = exponential();
+      firstInputText.innerHTML = firstInput + "<sup>" + secondInput + "</sup>";
+      break;
+    case 6:
+      secondInput = parseFloat(userInput.value);
+      userInput.value = root();
+      firstInputText.innerHTML = "<sup>" + secondInput + "</sup>" + "√" + firstInput;
       break;
     default:
       console.log("Unsuccessful");
