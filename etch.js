@@ -41,7 +41,7 @@ function keyboardInput(k) {
     operatorSelection(2, 3);
     return;
   }
-  if (userInput.value == "0") {
+  if (userInput.value === "0") {
     userInput.value = "";
   }
   if (!(userInput === document.activeElement)) {
@@ -192,6 +192,9 @@ function equals() {
       console.log("Unsuccessful");
       break;
   }
+  firstInput = undefined;
+  secondInput = undefined;
+  console.log("reached");
 }
 
 function clearAll() {
