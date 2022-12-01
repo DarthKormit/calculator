@@ -12,22 +12,18 @@ let signButton = document.getElementById("sign");
 let exponentialButton = document.getElementById("exponential");
 let rootButton = document.getElementById("root");
 
+//input variables and boolean array that handles which operation to calculate
 const booleanArray = [0, 0, 0, 0, 0, 0];
 let firstInput;
 let secondInput;
 
+//event listeners handling user input into the input field
 window.addEventListener("keydown", keyboardInput, false);
 window.addEventListener("keydown", keyboardOperator, false);
 userInput.addEventListener("input", inputValidation, false);
 userInput.addEventListener("keyup", inputAlwaysZero, false);
 
-function inputAlwaysZero() {
-  if (userInput.value == "") {
-    console.log(userInput.value);
-    userInput.value = "0";
-  }
-}
-
+//stops invalid user input from being placed inside of the input field
 function inputValidation() {
   userInput.value = userInput.value
     .replace(/(?!^-)[^0-9.]/g, "")
@@ -39,6 +35,7 @@ function inputValidation() {
   }
 }
 
+//handles input from the keyboard when not selecting the input field
 function keyboardInput(k) {
   if (k.shiftKey == true && k.keyCode == 56) {
     operatorSelection(2, 3);
@@ -56,8 +53,10 @@ function keyboardInput(k) {
     }
   }
   inputValidation();
+  inputAlwaysZero();
 }
 
+//handles which operation is selected by the keyboard input
 function keyboardOperator(k) {
   console.log(k.which);
   console.log(String.fromCharCode(k.keyCode));
@@ -97,14 +96,15 @@ function keyboardOperator(k) {
   }
 }
 
-function operatorSelection(arrayIndex, arrayValue) {
-  resetArray();
-  booleanArray[arrayIndex] = arrayValue;
-  console.log(booleanArray[arrayIndex]);
-  saveInput();
-  firstInputText.innerHTML = firstInput;
+//makes sure there is always a 0 in the input just like how it is in a calculator
+function inputAlwaysZero() {
+  if (userInput.value == "" && !(userInput === document.activeElement)) {
+    console.log(userInput.value);
+    userInput.value = "0";
+  }
 }
 
+//event listeners for all buttons
 addButton.addEventListener("click", function () {
   operatorSelection(0, 1);
 });
@@ -132,19 +132,7 @@ equalsButton.addEventListener("click", () => {
 backspaceButton.addEventListener("click", () => backspace());
 signButton.addEventListener("click", () => sign());
 
-function resetArray() {
-  for (let i = 0; i < booleanArray.length; i++) {
-    booleanArray[i] = 0;
-  }
-}
-
-function saveInput() {
-  if (firstInput === undefined) {
-    firstInput = parseFloat(userInput.value);
-    userInput.value = "0";
-  }
-}
-
+//functions of all operations
 function addition() {
   console.log(firstInput + secondInput);
   return firstInput + secondInput;
@@ -181,6 +169,52 @@ function sign() {
     userInput.value = signString.substring(1);
   } else {
     userInput.value = "-" + signString;
+  }
+}
+
+function resetArray() {
+  for (let i = 0; i < booleanArray.length; i++) {
+    booleanArray[i] = 0;
+  }
+}
+
+function saveInput() {
+  if (firstInput === undefined) {
+    firstInput = parseFloat(userInput.value);
+    userInput.value = "0";
+  }
+}
+
+function operatorSelection(arrayIndex, arrayValue) {
+  resetArray();
+  booleanArray[arrayIndex] = arrayValue;
+  console.log(booleanArray[arrayIndex]);
+  saveInput();
+  firstInputText.innerHTML = firstInput;
+}
+
+function clearAll() {
+  firstInput = undefined;
+  secondInput = undefined;
+  userInput.value = "0";
+  firstInputText.innerHTML = "0";
+  resetArray();
+  console.log("executed");
+}
+
+function clearEntry() {
+  userInput.value = "0";
+}
+
+function backspace() {
+  if (!(userInput === document.activeElement)) {
+    let backspaceString = userInput.value;
+    console.log(backspaceString);
+    backspaceString = backspaceString.slice(0, -1);
+    console.log(backspaceString);
+    userInput.value = backspaceString;
+    console.log("worked");
+    inputAlwaysZero();
   }
 }
 
@@ -221,7 +255,8 @@ function equals() {
     case 6:
       secondInput = parseFloat(userInput.value);
       userInput.value = root();
-      firstInputText.innerHTML = "<sup>" + secondInput + "</sup>" + "√" + firstInput;
+      firstInputText.innerHTML =
+        "<sup>" + secondInput + "</sup>" + "√" + firstInput;
       break;
     default:
       console.log("Unsuccessful");
@@ -230,29 +265,4 @@ function equals() {
   firstInput = undefined;
   secondInput = undefined;
   console.log("reached");
-}
-
-function clearAll() {
-  firstInput = undefined;
-  secondInput = undefined;
-  userInput.value = "0";
-  firstInputText.innerHTML = "0";
-  resetArray();
-  console.log("executed");
-}
-
-function clearEntry() {
-  userInput.value = "0";
-}
-
-function backspace() {
-  if (!(userInput === document.activeElement)) {
-    let backspaceString = userInput.value;
-    console.log(backspaceString);
-    backspaceString = backspaceString.slice(0, -1);
-    console.log(backspaceString);
-    userInput.value = backspaceString;
-    console.log("worked");
-    inputAlwaysZero();
-  }
 }
