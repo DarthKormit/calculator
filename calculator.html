@@ -6,19 +6,46 @@
     <title>Calculator</title>
   </head>
   <body draggable="false">
-    <p id="first-input-text">0</p>
-    <input type="text" id="user-input" autocomplete="off" value="0" />
-    <button type="submit" id="equals">=</button>
-    <button id="add">+</button>
-    <button id="sub">-</button>
-    <button id="mul">*</button>
-    <button id="divide">/</button>
-    <button id="exponential">x<sup>y</sup></button>
-    <button id="root">√</button>
-    <button id="sign">+/=</button>
-    <button id="clear-all">AC</button>
-    <button id="clear-entry">C</button>
-    <button id="backspace">&#9003;</button>
+    <div class="calculator">
+      <div class="calculator-content">
+        <p id="first-input-text">0</p>
+        <input
+          type="text"
+          id="user-input"
+          tabindex="-1"
+          autocomplete="off"
+          value="0"
+          draggable="false"
+        />
+    
+    <section class="basic-grid">
+      <button id="pie" class="button-operation">π</button>
+      <button id="clear-all" class="button-operation">AC</button>
+      <button id="clear-entry" class="button-operation">C</button>
+      <button id="backspace" class="button-operation">&#9003;</button>
+      <button id="euler" class="button-operation">e</button>
+      <button id="exponential" class="button-operation">&#119909;<sup>y</sup></button>
+      <button id="root" class="button-operation">√</button>
+      <button id="divide" class="button-operation">÷</button>
+      <button id="7" class="button-numeric" value="7">7</button>
+      <button id="8" class="button-numeric" value="8">8</button>
+      <button id="9" class="button-numeric" value="9">9</button>
+      <button id="mul" class="button-operation">×</button>
+      <button id="4" class="button-numeric" value="4">4</button>
+      <button id="5" class="button-numeric" value="5">5</button>
+      <button id="6" class="button-numeric" value="6">6</button>
+      <button id="sub" class="button-operation">-</button>
+      <button id="1" class="button-numeric" value="1">1</button>
+      <button id="2" class="button-numeric" value="2">2</button>
+      <button id="3" class="button-numeric" value="3">3</button>
+      <button id="add" class="button-operation">+</button>
+      <button id="sign" class="button-operation">+/-</button>
+      <button id="0" class="button-numeric" value="0">0</button>
+      <button id="decimal" class="button-operation">.</button>
+      <button type="submit" id="equals" class="button-operation">=</button>
+    </section>
+  </div>
+  </div>
   </body>
   <script src="etch.js"></script>
 </html>

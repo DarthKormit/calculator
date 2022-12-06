@@ -1,59 +1,98 @@
-let userInput = document.getElementById("user-input");
-let equalsButton = document.getElementById("equals");
-let addButton = document.getElementById("add");
-let subButton = document.getElementById("sub");
-let mulButton = document.getElementById("mul");
-let divideButton = document.getElementById("divide");
-let firstInputText = document.getElementById("first-input-text");
-let clearAllButton = document.getElementById("clear-all");
-let clearEntryButton = document.getElementById("clear-entry");
-let backspaceButton = document.getElementById("backspace");
-let signButton = document.getElementById("sign");
-let exponentialButton = document.getElementById("exponential");
-let rootButton = document.getElementById("root");
+const userInput = document.getElementById("user-input");
+const firstInputText = document.getElementById("first-input-text");
+const equalsButton = document.getElementById("equals");
+const addButton = document.getElementById("add");
+const subButton = document.getElementById("sub");
+const mulButton = document.getElementById("mul");
+const divideButton = document.getElementById("divide");
+const clearAllButton = document.getElementById("clear-all");
+const clearEntryButton = document.getElementById("clear-entry");
+const backspaceButton = document.getElementById("backspace");
+const signButton = document.getElementById("sign");
+const exponentialButton = document.getElementById("exponential");
+const rootButton = document.getElementById("root");
+const numericButtons = document.querySelectorAll(".button-numeric");
+const decimalButton = document.getElementById("decimal");
+const pieButton = document.getElementById("pie");
+const eulerNumberButton = document.getElementById("euler");
 
 //input variables and boolean array that handles which operation to calculate
 const booleanArray = [0, 0, 0, 0, 0, 0];
 let firstInput;
 let secondInput;
+let inputFontSize = 38;
 
 //event listeners handling user input into the input field
-window.addEventListener("keydown", keyboardInput, false);
+window.addEventListener("keydown", numericKeyboardInput, false);
 window.addEventListener("keydown", keyboardOperator, false);
+window.addEventListener("keydown", specialKeyboardInput, false);
 userInput.addEventListener("input", inputValidation, false);
 userInput.addEventListener("keyup", inputAlwaysZero, false);
+userInput.addEventListener("dragstart", function (e) {
+  e.preventDefault();
+});
 
 //stops invalid user input from being placed inside of the input field
 function inputValidation() {
   userInput.value = userInput.value
-    .replace(/(?!^-)[^0-9.]/g, "")
+    .replace(/(?!^-)(!^e)[^0-9.]/g, "")
     .replace(/(\..*?)\..*/g, "$1")
     .replace(/^0[^.]/, "0");
 
   if (userInput.value === ".") {
     userInput.value = "0" + userInput.value;
   }
+  inputAlwaysZero();
+}
+
+//makes sure there is always a 0 in the input just like how it is in a calculator
+function inputAlwaysZero() {
+  if (userInput.value == "" && !(userInput === document.activeElement)) {
+    console.log(userInput.value);
+    userInput.value = "0";
+  }
+  if (userInput.value.length < 1 && userInput === document.activeElement) {
+    console.log(userInput.value);
+    userInput.value = "0";
+    console.log("removed");
+  }
+}
+
+function keyboardNumeric(numericValue) {
+  let buttonNumber = numericValue;
+  if (userInput.value === "0") {
+    userInput.value = "";
+  }
+  userInput.value = userInput.value + buttonNumber;
+  inputValidation();
+}
+
+function numericKeyboardInput(k) {
+  if (!(userInput === document.activeElement)) {
+    if (k.key >= 0 && k.key <= 9) {
+      console.log(k.key);
+      let key = String(k.key);
+      console.log(key);
+      let element = document.getElementById(key);
+      console.log(element);
+      element.click();
+    }
+  }
 }
 
 //handles input from the keyboard when not selecting the input field
-function keyboardInput(k) {
+function specialKeyboardInput(k) {
   if (k.shiftKey == true && k.keyCode == 56) {
     operatorSelection(2, 3);
     return;
   }
-  if (userInput.value === "0") {
-    userInput.value = "";
+  if (k.keyCode === 173 && userInput.value === "-0") {
+    userInput.value = "0";
   }
-  if (!(userInput === document.activeElement)) {
-    userInput.value = userInput.value + String.fromCharCode(k.keyCode);
-    if (k.keyCode == 190 && !(userInput.value === "0")) {
-      userInput.value = userInput.value + ".";
-    } else if (k.keyCode == 190 && userInput.value === "0") {
-      userInput.value = userInput.value + "0";
-    }
+  if (k.keyCode === 190) {
+    document.getElementById("decimal").click();
   }
   inputValidation();
-  inputAlwaysZero();
 }
 
 //handles which operation is selected by the keyboard input
@@ -71,6 +110,9 @@ function keyboardOperator(k) {
       resetArray();
       break;
     case 173:
+      if (userInput.value == "") {
+        userInput.value = "0";
+      }
       operatorSelection(1, 2);
       break;
     case 56:
@@ -91,16 +133,11 @@ function keyboardOperator(k) {
     case 8:
       backspace();
       break;
+    case 120:
+      sign();
+      break;
     default:
       break;
-  }
-}
-
-//makes sure there is always a 0 in the input just like how it is in a calculator
-function inputAlwaysZero() {
-  if (userInput.value == "" && !(userInput === document.activeElement)) {
-    console.log(userInput.value);
-    userInput.value = "0";
   }
 }
 
@@ -129,8 +166,24 @@ equalsButton.addEventListener("click", () => {
   equals();
   resetArray();
 });
+pieButton.addEventListener("click", function () {
+  userInput.value = Math.PI;
+  inputValidation();
+  inputAlwaysZero();
+});
+eulerNumberButton.addEventListener("click", function () {
+  userInput.value = Math.E;
+  inputValidation();
+  inputAlwaysZero();
+});
 backspaceButton.addEventListener("click", () => backspace());
 signButton.addEventListener("click", () => sign());
+decimalButton.addEventListener("click", () => decimal());
+numericButtons.forEach((numericButton) => {
+  numericButton.addEventListener("click", () =>
+    keyboardNumeric(numericButton.value)
+  );
+});
 
 //functions of all operations
 function addition() {
@@ -156,6 +209,13 @@ function division() {
 function exponential() {
   console.log(Math.pow(firstInput, secondInput));
   return Math.pow(firstInput, secondInput);
+}
+
+function decimal() {
+  if (!(userInput === document.activeElement)) {
+    userInput.value = userInput.value + ".";
+  }
+  inputValidation();
 }
 
 function root() {
@@ -190,7 +250,41 @@ function operatorSelection(arrayIndex, arrayValue) {
   booleanArray[arrayIndex] = arrayValue;
   console.log(booleanArray[arrayIndex]);
   saveInput();
-  firstInputText.innerHTML = firstInput;
+  changeFirstInputText();
+  // firstInputText.innerHTML = firstInput;
+}
+
+function changeFirstInputText() {
+  let operationNumber = 0;
+  for (var i = 0; i < booleanArray.length; i++) {
+    operationNumber = operationNumber + booleanArray[i];
+  }
+  switch (operationNumber) {
+    case 1:
+      firstInputText.innerHTML = firstInput + "+";
+      break;
+    case 2:
+      firstInputText.innerHTML = firstInput + "-";
+      break;
+
+    case 3:
+      firstInputText.innerHTML = firstInput + "×";
+      break;
+
+    case 4:
+      firstInputText.innerHTML = firstInput + "÷";
+      break;
+    case 5:
+      firstInputText.innerHTML = firstInput + "^";
+      break;
+    case 6:
+      firstInputText.innerHTML =
+        "<sup>" + "&#119909;" + "</sup>" + "√" + firstInput;
+      break;
+    default:
+      console.log("Unsuccessful");
+      break;
+  }
 }
 
 function clearAll() {
@@ -216,6 +310,7 @@ function backspace() {
     console.log("worked");
     inputAlwaysZero();
   }
+  inputAlwaysZero();
 }
 
 function equals() {
@@ -239,13 +334,13 @@ function equals() {
     case 3:
       secondInput = parseFloat(userInput.value);
       userInput.value = multiplication();
-      firstInputText.innerHTML = firstInput + "*" + secondInput;
+      firstInputText.innerHTML = firstInput + "×" + secondInput;
       break;
 
     case 4:
       secondInput = parseFloat(userInput.value);
       userInput.value = division();
-      firstInputText.innerHTML = firstInput + "/" + secondInput;
+      firstInputText.innerHTML = firstInput + "÷" + secondInput;
       break;
     case 5:
       secondInput = parseFloat(userInput.value);

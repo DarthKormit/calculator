@@ -1,6 +1,105 @@
-body{
-  background-image: url('background.jpg');
+body {
+  background-image: url("background.jpg");
   background-repeat: no-repeat;
   background-attachment: fixed;
   background-size: cover;
+}
+
+.basic-grid {
+  display: grid;
+  padding: 5px;
+  margin: auto;
+  justify-content: center;
+  
+
+  grid-template-columns: 120px 120px 120px 120px;
+  grid-template-rows: 80px 80px 80px 80px 80px;
+  --stagger-delay: 100ms;
+}
+
+.button-operation,
+.button-numeric {
+  border-radius: 1px;
+  border: 1px solid #353535;
+  display: table-cell;
+  width: 120px;
+  height: 80px;
+  font-size: xx-large;
+  text-align: center;
+  vertical-align: middle;
+  transition-duration: 0.2s;
+}
+
+.button-operation:hover,
+.button-numeric:hover{
+  background-color: rgb(70, 70, 70);
+  border: 1px solid rgb(48, 48, 48);;
+  color: white;
+}
+
+.button-operation:active,
+.button-numeric:active{
+  background-color: rgb(92, 92, 92);
+  border: 1px solid rgb(48, 48, 48);;
+  color: white;
+}
+
+.button-operation{
+  background-color: rgb(29, 29, 29);
+  color: white;
+}
+
+.button-numeric{
+  background-color: black;
+  color: white;
+}
+
+#first-input-text{
+  display: flex;
+  margin: auto;
+  color: white;
+  justify-content: right;
+  width: 480px;
+  height: 80px;
+  max-width: 480px;
+  max-height: 80px;
+  align-items: center;
+  font-size: x-large;
+}
+
+#user-input{
+  display: flex;
+  margin: auto;
+  justify-content: center;
+  width: 474px;
+  height: 80px;
+  max-width: 474px;
+  max-height: 80px;
+  font-size: 38pt;
+  text-align: right;
+  background-color: transparent;
+  border: none;
+  color: white;
+}
+.calculator {
+  margin-top: 5%;
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+  width: 550px;
+  height: 700px;
+  justify-content: center;
+  align-content: center;
+  background-color: #353535e5;
+  border: 2px solid rgba(7, 7, 97, 0.596);
+}
+
+.calculator-content{
+  top: 4%;
+  position: relative;
+  justify-content: center;
+  align-content: center;
+  width: 550px;
+  height: 654px;
+  display: block;
 }
